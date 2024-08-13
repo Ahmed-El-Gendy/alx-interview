@@ -3,27 +3,21 @@
 Check if all boxes can be opened using DFS
 """
 
-# Global variables
-visit = set()
-sz = 0
 
-
-def dfs(node, boxes):
+def dfs(node, boxes, visit):
     """
     Perform DFS to visit all nodes reachable from the current node.
     """
     visit.add(node)
     for key in boxes[node]:
-        if key not in visit and key < sz:
-            dfs(key, boxes)
+        if key not in visit and key < len(boxes):
+            dfs(key, boxes, visit)
 
 
 def canUnlockAll(boxes):
     """
     Determine if all boxes can be unlocked.
     """
-    global sz
-    visit.clear()
-    sz = len(boxes)
-    dfs(0, boxes)
-    return len(visit) == sz
+    visit = set()
+    dfs(0, boxes, visit)
+    return len(visit) == len(boxes)
