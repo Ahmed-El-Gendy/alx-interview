@@ -4,7 +4,7 @@ lockboxes problem
 """
 
 
-def can_unlock_all(boxes):
+def canUnlockAll(boxes):
     """
     Determines whether a series of locked boxes can be opened
     """
