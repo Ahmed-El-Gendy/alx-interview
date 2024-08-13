@@ -3,6 +3,10 @@
 Check if all boxes can be opened using DFS
 """
 
+# Global variables
+visit = set()
+sz = 0
+
 
 def dfs(node, boxes):
     """
