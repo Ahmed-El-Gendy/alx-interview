@@ -1,23 +1,24 @@
 #!/usr/bin/python3
 """
-Check if all boxes can be opened using DFS
+lockboxes problem
 """
 
 
-def dfs(node, boxes, visit):
+def can_unlock_all(boxes):
     """
-    Perform DFS to visit all nodes reachable from the current node.
+    Determines whether a series of locked boxes can be opened
     """
-    visit.add(node)
-    for key in boxes[node]:
-        if key not in visit and key < len(boxes):
-            dfs(key, boxes, visit)
+    if not isinstance(boxes, list) or len(boxes) == 0:
+        return False
 
+    unlocked_boxes = set()
+    keys = set(boxes[0])
+    unlocked_boxes.add(0)
 
-def canUnlockAll(boxes):
-    """
-    Determine if all boxes can be unlocked.
-    """
-    visit = set()
-    dfs(0, boxes, visit)
-    return len(visit) == len(boxes)
+    while keys:
+        key = keys.pop()
+        if key < len(boxes) and key not in unlocked_boxes:
+            unlocked_boxes.add(key)
+            keys.update(boxes[key])
+
+    return len(unlocked_boxes) == len(boxes)
