@@ -3,7 +3,6 @@
 Check if all boxes can be opened using DFS
 """
 
-
 def dfs(node, boxes, visit):
     """
     Perform DFS to visit all nodes reachable from the current node.
