@@ -14,7 +14,7 @@ def dfs(node, boxes):
     """
     visit.add(node)
     for key in boxes[node]:
-        if key not in visit and key < sz:
+        if key not in visit and key <= sz:
             dfs(key, boxes)
 
 
