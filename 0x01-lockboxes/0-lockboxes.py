@@ -18,6 +18,10 @@ def canUnlockAll(boxes):
     """
     Determine if all boxes can be unlocked.
     """
+    if (len(boxes)) == 0:
+        return False
+    elif (type(boxes)) is not list:
+        return False
     visit = set()
     dfs(0, boxes, visit)
     return len(visit) == len(boxes)
