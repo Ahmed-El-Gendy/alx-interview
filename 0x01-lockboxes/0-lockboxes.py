@@ -8,9 +8,6 @@ def canUnlockAll(boxes):
     """
     Determines whether a series of locked boxes can be opened
     """
-    if not isinstance(boxes, list) or len(boxes) == 0:
-        return False
-
     unlocked_boxes = set()
     keys = set(boxes[0])
     unlocked_boxes.add(0)
