@@ -5,53 +5,45 @@ Log parsing
 
 import sys
 import re
-import signal
+from collections import defaultdict
 
-
-regex = re.compile(
-    r'^\d{1,3}(?:\.\d{1,3}){3} - \[.*?\] "GET /projects/260 HTTP/1\.1" '
-    r'(\d{3}) (\d+)$'
-)
-
-status_counts = defaultdict(int)
-total_file_size = 0
-line_counter = 0
-
-
-def print_statistics():
+def display_statistics(file_size: int, code_frequency: defaultdict) -> None:
     """
-    Helper function to display stats
+    Displays the statistics of the log data.
     """
-    print(f"Total file size: {total_file_size}")
-    for code in sorted(status_counts):
-        print(f"{code}: {status_counts[code]}")
+    print(f"File size: {file_size}")
+    for code in sorted(code_frequency):
+        count = code_frequency[code]
+        if count > 0:
+            print(f"{code}: {count}")
 
+def main():
+    regex = re.compile(
+        r'^\d{1,3}(?:\.\d{1,3}){3} - \[.*?\] "GET /projects/260 HTTP/1\.1" (\d{3}) (\d+)$'
+    )
 
-def handle_interrupt(sig, frame):
-    """
-    Signal handler for keyboard interruption
-    """
-    print("\nKeyboardInterrupt received. Printing statistics...")
-    print_statistics()
-    sys.exit(0)
+    line_count = 0
+    file_size = 0
+    code_frequency = defaultdict(int)
 
+    try:
+        for line in sys.stdin:
+            line = line.strip()
+            match = regex.fullmatch(line)
+            if match:
+                line_count += 1
+                status_code, size_str = match.groups()
+                size = int(size_str)
 
-signal.signal(signal.SIGINT, handle_interrupt)
+                file_size += size
+                code_frequency[status_code] += 1
 
+                if line_count % 10 == 0:
+                    display_statistics(file_size, code_frequency)
+    except BrokenPipeError:
+        pass
+    finally:
+        display_statistics(file_size, code_frequency)
 
-for line in sys.stdin:
-    match = regex.match(line.strip())
-    if match:
-        line_counter += 1
-        status_code, file_size = match.groups()
-        try:
-            file_size = int(file_size)
-            status_code = int(status_code)
-            if status_code in [200, 301, 400, 401, 403, 404, 405, 500]:
-                status_counts[status_code] += 1
-                total_file_size += file_size
-        except ValueError:
-            continue
-
-    if line_counter % 10 == 0:
-        print_statistics()
+if __name__ == "__main__":
+    main()
