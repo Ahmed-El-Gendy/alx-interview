@@ -7,6 +7,7 @@ import sys
 import re
 from collections import defaultdict
 
+
 def display_statistics(file_size: int, code_frequency: defaultdict) -> None:
     """
     Displays the statistics of the log data.
@@ -17,10 +18,14 @@ def display_statistics(file_size: int, code_frequency: defaultdict) -> None:
         if count > 0:
             print(f"{code}: {count}")
 
+
 def main():
-    regex = re.compile(
-        r'^\d{1,3}(?:\.\d{1,3}){3} - \[.*?\] "GET /projects/260 HTTP/1\.1" (\d{3}) (\d+)$'
+    pattern = (
+        r'^\d{1,3}(?:\.\d{1,3}){3} - \[.*?\] "GET /projects/260 HTTP/1\.1" '
+        r'(\d{3}) (\d+)$'
     )
+
+    regex = re.compile(pattern)
 
     line_count = 0
     file_size = 0
@@ -44,6 +49,7 @@ def main():
         pass
     finally:
         display_statistics(file_size, code_frequency)
+
 
 if __name__ == "__main__":
     main()
