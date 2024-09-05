@@ -3,13 +3,14 @@
 Determines if a given data is a valid UTF-8
 """
 
+
 def validUTF8(data):
     """
     valid UTF-8 encoding
     """
     # Number of bytes in the current UTF-8 character
     num_bytes = 0
-    
+
     # Masks to check the most significant bits
     # Mask for 1 byte: 0xxxxxxx (0x80 = 10000000, 0x00 = 00000000)
     mask1 = 0x80
