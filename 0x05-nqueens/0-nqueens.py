@@ -2,7 +2,6 @@
 """
 Queens problem
 """
-
 import sys
 
 
