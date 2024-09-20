@@ -2,14 +2,15 @@
 
 const axios = require('axios');
 
-const fetchCharacters = async (urls) => {
-    try {
-        for (let url of urls) {
+const fetchCharactersSequentially = async (urls) => {
+    for (const url of urls) {
+        try {
             const response = await axios.get(url);
             console.log(response.data.name);
+        } catch (error) {
+            console.error(error);
+            throw error;
         }
-    } catch (error) {
-        console.error(error);
     }
 };
 
@@ -17,7 +18,7 @@ const fetchFilmCharacters = async (filmId) => {
     try {
         const response = await axios.get(`https://swapi-api.hbtn.io/api/films/${filmId}`);
         const characters = response.data.characters;
-        await fetchCharacters(characters);
+        await fetchCharactersSequentially(characters);
     } catch (error) {
         console.error(error);
     }
