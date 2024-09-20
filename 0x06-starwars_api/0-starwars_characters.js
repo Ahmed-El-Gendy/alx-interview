@@ -2,31 +2,24 @@
 
 const axios = require('axios');
 
-const fetchCharactersSequentially = async (urls) => {
-    for (const url of urls) {
-        try {
-            const response = await axios.get(url);
-            console.log(response.data.name);
-        } catch (error) {
-            console.error(error);
-            throw error;
-        }
+const fetchCharactersSequentially = async (arr, idx) => {
+    if (idx === arr.length) {
+        return;
     }
-};
-
-const fetchFilmCharacters = async (filmId) => {
     try {
-        const response = await axios.get(`https://swapi-api.hbtn.io/api/films/${filmId}`);
-        const characters = response.data.characters;
-        await fetchCharactersSequentially(characters);
+        const response = await axios.get(arr[idx]);
+        console.log(response.data.name);
+        fetchCharactersSequentially(arr, idx + 1);
     } catch (error) {
         console.error(error);
     }
 };
 
-const filmId = process.argv[2];
-if (filmId) {
-    fetchFilmCharacters(filmId);
-} else {
-    console.log('Please provide a film ID');
-}
+axios.get(`https://swapi-api.hbtn.io/api/films/${process.argv[2]}`)
+    .then(response => {
+        const characters = response.data.characters;
+        fetchCharactersSequentially(characters, 0);
+    })
+    .catch(error => {
+        console.error(error);
+    });
