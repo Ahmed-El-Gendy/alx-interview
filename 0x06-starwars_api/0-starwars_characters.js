@@ -1,12 +1,12 @@
 #!/usr/bin/node
 
-const axios = require('axios');
+const request = require('request');
 
 const fetchCharactersSequentially = (arr, idx) => {
     if (idx === arr.length) {
         return;
     }
-    request(arr[idx], (err, body) => {
+    request(arr[idx], (err, response, body) => {
         if (err) {
             throw err;
         } else {
@@ -18,11 +18,11 @@ const fetchCharactersSequentially = (arr, idx) => {
 
 request(
     `https://swapi-api.hbtn.io/api/films/${process.argv[2]}`,
-    (err, body) => {
+    (err, response, body) => {
         if (err) {
             throw err;
         } else {
-            const characters = JSON.parse(body).results;
+            const characters = JSON.parse(body).characters;
             fetchCharactersSequentially(characters, 0);
         }
     }
