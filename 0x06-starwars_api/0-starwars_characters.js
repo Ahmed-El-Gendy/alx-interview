@@ -2,18 +2,19 @@
 
 const request = require('request');
 
-const test = (arr, i) => {
-    if (i === arr.length) return;
-    request(arr[i], (err, response, body) => {
+const fetchCharactersSequentially = (arr, idx) => {
+    if (idx === arr.length) {
+        return;
+    }
+    request(arr[idx], (err, response, body) => {
         if (err) {
             throw err;
         } else {
             console.log(JSON.parse(body).name);
-            test(arr, i + 1);
+            fetchCharactersSequentially(arr, idx + 1);
         }
     });
 };
-
 
 request(
     `https://swapi-api.hbtn.io/api/films/${process.argv[2]}`,
@@ -21,8 +22,8 @@ request(
         if (err) {
             throw err;
         } else {
-            const chars = JSON.parse(body).characters;
-            test(chars, 0);
+            const characters = JSON.parse(body).characters;
+            fetchCharactersSequentially(characters, 0);
         }
     }
 );
