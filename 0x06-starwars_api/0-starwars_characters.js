@@ -2,24 +2,28 @@
 
 const axios = require('axios');
 
-const fetchCharactersSequentially = async (arr, idx) => {
+const fetchCharactersSequentially = (arr, idx) => {
     if (idx === arr.length) {
         return;
     }
-    try {
-        const response = await axios.get(arr[idx]);
-        console.log(response.data.name);
-        fetchCharactersSequentially(arr, idx + 1);
-    } catch (error) {
-        console.error(error);
-    }
+    request(arr[idx], (err, body) => {
+        if (err) {
+            console.error(err);
+        } else {
+            console.log(JSON.parse(body).name);
+            fetchCharactersSequentially(arr, idx + 1);
+        }
+    });
 };
 
-axios.get(`https://swapi-api.hbtn.io/api/films/${process.argv[2]}`)
-    .then(response => {
-        const characters = response.data.characters;
-        fetchCharactersSequentially(characters, 0);
-    })
-    .catch(error => {
-        console.error(error);
-    });
+request(
+    `https://swapi-api.hbtn.io/api/films/${process.argv[2]}`,
+    (err, body) => {
+        if (err) {
+            console.error(err);
+        } else {
+            const characters = JSON.parse(body).results;
+            fetchCharactersSequentially(characters, 0);
+        }
+    }
+);
