@@ -4,7 +4,7 @@ Prime Game problem
 """
 
 
-def isWinner(x, nums):
+def is_winner(x, nums):
     """
     Determine who wins the game
     """
