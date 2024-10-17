@@ -21,7 +21,7 @@ def isWinner(x, nums):
 
     sieve = [i for i in range(n + 1) if sieve[i]]
     wins = 0
-    for i in range(x):
+    for i in range(min(x, len(sieve))):
         wins += sieve[i] in nums
 
     return "Maria" if wins % 2 == 0 or wins == 0 else "Ben"
